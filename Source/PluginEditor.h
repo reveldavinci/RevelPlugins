@@ -77,13 +77,13 @@ public:
 private:
     CustomLookAndFeel customLookAndFeel;
 
-    juce::Slider driveSlider, reverbSlider, toneSlider, widthSlider, mixSlider, outputSlider;
+    juce::Slider driveSlider, reverbSlider, toneSlider, widthSlider, mixSlider, outputSlider, sizeSlider, dampingSlider;
     juce::ToggleButton prePostButton;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachment, reverbAttachment, toneAttachment, widthAttachment, mixAttachment, outputAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachment, reverbAttachment, toneAttachment, widthAttachment, mixAttachment, outputAttachment, sizeAttachment, dampingAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> prePostAttachment;
 
-    juce::Label driveLabel, reverbLabel, toneLabel, widthLabel, mixLabel, outputLabel;
+    juce::Label driveLabel, reverbLabel, toneLabel, widthLabel, mixLabel, outputLabel, sizeLabel, dampingLabel;
 
     NewLouderSaturator_Feb21AudioProcessor& audioProcessor;
 

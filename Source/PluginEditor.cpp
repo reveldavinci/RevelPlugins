@@ -29,6 +29,8 @@ NewLouderSaturator_Feb21AudioProcessorEditor::NewLouderSaturator_Feb21AudioProce
     setupSlider (widthSlider, widthLabel, "WIDTH");
     setupSlider (mixSlider, mixLabel, "MIX");
     setupSlider (outputSlider, outputLabel, "OUTPUT");
+    setupSlider (sizeSlider, sizeLabel, "SIZE");
+    setupSlider (dampingSlider, dampingLabel, "DAMPING");
 
     prePostButton.setButtonText ("PRE");
     prePostButton.setClickingTogglesState (true);
@@ -42,6 +44,8 @@ NewLouderSaturator_Feb21AudioProcessorEditor::NewLouderSaturator_Feb21AudioProce
     widthAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "width", widthSlider);
     mixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "mix", mixSlider);
     outputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "output", outputSlider);
+    sizeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "size", sizeSlider);
+    dampingAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "damping", dampingSlider);
     prePostAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (audioProcessor.apvts, "prePost", prePostButton);
 
     setSize (500, 450);
@@ -119,17 +123,33 @@ void NewLouderSaturator_Feb21AudioProcessorEditor::resized()
     driveSlider.setBounds (driveArea);
     driveLabel.setBounds (driveArea.translated (0, driveArea.getHeight() * 0.5f + 5).withHeight (20));
 
-    // Flanking (Medium Reverb & Tone)
+    // Flanking Columns (Reverb & Tone)
     auto sideWidth = (mainRow.getWidth() - centerWidth) * 0.5f;
-    auto sideSize = sideWidth * 0.8f;
+    auto reverbColumn = mainRow.removeFromLeft(sideWidth);
+    auto toneColumn = mainRow.removeFromRight(sideWidth);
 
-    auto reverbArea = mainRow.removeFromLeft (sideWidth).withSizeKeepingCentre (sideSize, sideSize);
-    reverbSlider.setBounds (reverbArea);
-    reverbLabel.setBounds (reverbArea.translated (0, reverbArea.getHeight() * 0.5f + 5).withHeight (20));
+    // Reverb Controls
+    auto reverbKnobSize = sideWidth * 0.7f;
+    auto reverbArea = reverbColumn.removeFromTop(reverbColumn.getHeight() * 0.7f).withSizeKeepingCentre(reverbKnobSize, reverbKnobSize);
+    reverbSlider.setBounds(reverbArea);
+    reverbLabel.setBounds(reverbArea.translated(0, reverbArea.getHeight() * 0.5f + 5).withHeight(20));
 
-    auto toneArea = mainRow.removeFromRight (sideWidth).withSizeKeepingCentre (sideSize, sideSize);
-    toneSlider.setBounds (toneArea);
-    toneLabel.setBounds (toneArea.translated (0, toneArea.getHeight() * 0.5f + 5).withHeight (20));
+    auto subReverbArea = reverbColumn;
+    auto smallKnobSize = subReverbArea.getWidth() * 0.4f;
+    auto sizeArea = subReverbArea.removeFromLeft(subReverbArea.getWidth() / 2).withSizeKeepingCentre(smallKnobSize, smallKnobSize);
+    sizeSlider.setBounds(sizeArea);
+    sizeLabel.setBounds(sizeArea.translated(0, sizeArea.getHeight() * 0.5f + 5).withHeight(20));
+
+    auto dampingArea = subReverbArea.withSizeKeepingCentre(smallKnobSize, smallKnobSize);
+    dampingSlider.setBounds(dampingArea);
+    dampingLabel.setBounds(dampingArea.translated(0, dampingArea.getHeight() * 0.5f + 5).withHeight(20));
+
+    // Tone Control
+    auto toneKnobSize = sideWidth * 0.8f;
+    auto toneArea = toneColumn.withSizeKeepingCentre(toneKnobSize, toneKnobSize);
+    toneSlider.setBounds(toneArea);
+    toneLabel.setBounds(toneArea.translated(0, toneArea.getHeight() * 0.5f + 5).withHeight(20));
+
 
     // Button Position
     prePostButton.setBounds (reverbArea.translated (0, -40).withHeight (30).withWidth (60));

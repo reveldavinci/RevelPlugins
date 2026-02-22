@@ -33,6 +33,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout NewLouderSaturator_Feb21Audi
 
     layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "drive", 1 }, "Drive", 0.0f, 10.0f, 0.0f));
     layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "reverb", 1 }, "Reverb", 0.0f, 100.0f, 0.0f));
+    layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "size", 1 }, "Size", 0.0f, 1.0f, 0.5f));
+    layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "damping", 1 }, "Damping", 0.0f, 1.0f, 0.5f));
     layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { "prePost", 1 }, "Pre/Post", juce::StringArray { "Pre", "Post" }, 0));
     layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "tone", 1 }, "Tone", -100.0f, 100.0f, 0.0f));
     layout.add (std::make_unique<juce::AudioParameterFloat> (juce::ParameterID { "width", 1 }, "Width", 0.0f, 200.0f, 100.0f));
@@ -58,8 +60,8 @@ void NewLouderSaturator_Feb21AudioProcessor::changeProgramName (int index, const
 void NewLouderSaturator_Feb21AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     reverb.setSampleRate (sampleRate);
-    reverbParameters.roomSize = 0.3f; 
-    reverbParameters.damping = 0.8f;
+    reverbParameters.roomSize = 0.5f; 
+    reverbParameters.damping = 0.5f;
     reverbParameters.wetLevel = 0.0f; 
     reverbParameters.dryLevel = 1.0f;
     reverbParameters.width = 1.0f;
@@ -126,6 +128,8 @@ void NewLouderSaturator_Feb21AudioProcessor::processBlock (juce::AudioBuffer<flo
 
     float drive = apvts.getRawParameterValue("drive")->load();
     float reverbAmount = apvts.getRawParameterValue("reverb")->load() / 100.0f;
+    float size = apvts.getRawParameterValue("size")->load();
+    float damping = apvts.getRawParameterValue("damping")->load();
     float prePost = apvts.getRawParameterValue("prePost")->load();
     float tone = apvts.getRawParameterValue("tone")->load();
     float width = apvts.getRawParameterValue("width")->load() / 100.0f; 
@@ -134,6 +138,9 @@ void NewLouderSaturator_Feb21AudioProcessor::processBlock (juce::AudioBuffer<flo
 
     juce::AudioBuffer<float> dryBuffer;
     dryBuffer.makeCopyOf(buffer);
+
+    reverbParameters.roomSize = size;
+    reverbParameters.damping = std::pow(damping, 3.0f);
 
     if (prePost < 0.5f) // PRE
     {

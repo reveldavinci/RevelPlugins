@@ -1,1 +1,17 @@
-Builds/
+# macOS specific ignores
+.DS_Store
+
+# Xcode project files (user-specific)
+# These are often regenerated and contain local user settings
+# Ignore the entire build output directory
+Builds/MacOSX/build/
+
+# Ignore workspace and user data within the .xcodeproj bundle
+Builds/MacOSX/*.xcodeproj/*.xcworkspace/
+Builds/MacOSX/*.xcodeproj/xcuserdata/
+
+# JUCE Projucer user settings
+*.jucer.user
+
+# Core source code
+
