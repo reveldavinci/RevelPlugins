@@ -1,172 +1,164 @@
-/*
-  ==============================================================================
-    This file contains the basic framework code for a JUCE plugin editor.
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
 NewLouderSaturator_Feb21AudioProcessorEditor::NewLouderSaturator_Feb21AudioProcessorEditor (NewLouderSaturator_Feb21AudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    auto setupSlider = [this](juce::Slider& slider, juce::Label& label, const juce::String& name) {
+    setLookAndFeel (&customLookAndFeel);
+
+    auto setupSlider = [this](juce::Slider& slider, juce::Label& label, const juce::String& name, juce::Colour color) {
         slider.setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
         slider.setTextBoxStyle (juce::Slider::NoTextBox, false, 0, 0);
-        slider.setLookAndFeel (&customLookAndFeel);
+        slider.setColour (juce::Slider::thumbColourId, color); 
         addAndMakeVisible (slider);
-
+        
         label.setText (name, juce::dontSendNotification);
-        label.setFont (juce::FontOptions (12.0f)); 
-        label.setJustificationType (juce::Justification::centred);
+        label.setFont (juce::FontOptions (11.0f).withStyle("Bold")); 
+        label.setColour(juce::Label::textColourId, juce::Colours::grey);
+        label.setJustificationType (juce::Justification::centredTop); 
         addAndMakeVisible (label);
     };
 
-    setupSlider (driveSlider, driveLabel, "DRIVE");
-    setupSlider (reverbSlider, reverbLabel, "REVERB");
-    setupSlider (toneSlider, toneLabel, "TONE");
-    setupSlider (widthSlider, widthLabel, "WIDTH");
-    setupSlider (mixSlider, mixLabel, "MIX");
-    setupSlider (outputSlider, outputLabel, "OUTPUT");
-    setupSlider (sizeSlider, sizeLabel, "SIZE");
-    setupSlider (dampingSlider, dampingLabel, "DAMPING");
+    juce::Colour satColor   = juce::Colour (0xFF0087FF); 
+    juce::Colour revColor   = juce::Colour (0xFF4DB8FF); 
+    juce::Colour utilColor  = juce::Colour (0xFF0055AA); 
 
-    prePostButton.setButtonText ("PRE");
-    prePostButton.setClickingTogglesState (true);
-    prePostButton.setColour (juce::ToggleButton::textColourId, juce::Colours::white);
-    prePostButton.setColour (juce::ToggleButton::tickColourId, juce::Colour (0xFF0087FF));
+    satSectionLabel.setText("SATURATION", juce::dontSendNotification);
+    satSectionLabel.setFont(juce::FontOptions(14.0f).withStyle("Bold"));
+    satSectionLabel.setColour(juce::Label::textColourId, satColor);
+    satSectionLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(satSectionLabel);
+
+    revSectionLabel.setText("REVERB", juce::dontSendNotification);
+    revSectionLabel.setFont(juce::FontOptions(14.0f).withStyle("Bold"));
+    revSectionLabel.setColour(juce::Label::textColourId, revColor);
+    revSectionLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(revSectionLabel);
+
+    setupSlider (driveSlider, driveLabel, "DRIVE", satColor);
+    setupSlider (toneSlider, toneLabel, "TONE", satColor);
+    setupSlider (reverbSlider, reverbLabel, "AMOUNT", revColor);
+    setupSlider (decaySlider, decayLabel, "DECAY", revColor);
+    setupSlider (dampingSlider, dampingLabel, "DAMPING", revColor);
+    setupSlider (inputSlider, inputLabel, "INPUT", utilColor);
+    setupSlider (mixSlider, mixLabel, "MIX", utilColor);
+    setupSlider (widthSlider, widthLabel, "WIDTH", utilColor);
+    setupSlider (outputSlider, outputLabel, "OUTPUT", utilColor);
+
+    prePostButton.setName("PrePostButton");
     addAndMakeVisible (prePostButton);
 
+    bypassButton.setName("BypassButton");
+    addAndMakeVisible (bypassButton);
+
+    reverbTypeCombo.addItem("Room", 1);
+    reverbTypeCombo.addItem("Hall", 2);
+    reverbTypeCombo.addItem("Plate", 3);
+    reverbTypeCombo.setJustificationType(juce::Justification::centred);
+    reverbTypeCombo.setColour(juce::ComboBox::backgroundColourId, juce::Colour(0xFF2D2D2D));
+    reverbTypeCombo.setColour(juce::ComboBox::outlineColourId, juce::Colour(0xFF3A3A3A));
+    addAndMakeVisible(reverbTypeCombo);
+
+    inputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "input", inputSlider);
     driveAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "drive", driveSlider);
     reverbAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "reverb", reverbSlider);
     toneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "tone", toneSlider);
+    decayAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "decay", decaySlider);
+    dampingAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "damping", dampingSlider);
     widthAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "width", widthSlider);
     mixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "mix", mixSlider);
     outputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "output", outputSlider);
-    sizeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "size", sizeSlider);
-    dampingAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "damping", dampingSlider);
-    prePostAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (audioProcessor.apvts, "prePost", prePostButton);
-
-    setSize (500, 450);
     
-    // ---> NEW: Start the UI refresh timer at 30 frames per second <---
+    // ---> THE FIX: Hooking the ButtonAttachment up to the newly renamed ID <---
+    prePostAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (audioProcessor.apvts, "prePostSwitch", prePostButton);
+    
+    typeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment> (audioProcessor.apvts, "reverbType", reverbTypeCombo);
+    bypassAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (audioProcessor.apvts, "bypass", bypassButton);
+
+    setSize (640, 520); 
     startTimerHz(30);
 }
 
 NewLouderSaturator_Feb21AudioProcessorEditor::~NewLouderSaturator_Feb21AudioProcessorEditor()
 {
-
-    stopTimer(); // <--- ADD THIS LINE TO PREVENT THE CRASH
-
-    driveSlider.setLookAndFeel (nullptr);
-    reverbSlider.setLookAndFeel (nullptr);
-    toneSlider.setLookAndFeel (nullptr);
-    widthSlider.setLookAndFeel (nullptr);
-    mixSlider.setLookAndFeel (nullptr);
-    outputSlider.setLookAndFeel (nullptr);
+    stopTimer();
+    setLookAndFeel (nullptr); 
 }
 
-// ---> NEW: The Timer Loop <---
 void NewLouderSaturator_Feb21AudioProcessorEditor::timerCallback()
 {
-    // A decay of 0.85f gives it that smooth, vintage LED drop-off
     smoothInputLevel = juce::jmax(audioProcessor.inputLevel.load(), smoothInputLevel * 0.85f);
     smoothOutputLevel = juce::jmax(audioProcessor.outputLevel.load(), smoothOutputLevel * 0.85f);
     repaint();
 }
 
-//==============================================================================
 void NewLouderSaturator_Feb21AudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colour (0xFF1A1A1A)); // Flat dark background
-
+    g.fillAll (juce::Colour (0xFF1A1A1A)); 
+    
     g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (20.0f).withName ("Helvetica Neue").withStyle ("Bold")); 
+    g.setFont (juce::FontOptions (22.0f).withName ("Helvetica Neue").withStyle ("Bold")); 
     g.drawText ("a LOUDER Saturator", getLocalBounds().removeFromTop (50), juce::Justification::centred);
 
-    // ---> NEW: Draw the Meters <---
-    int meterWidth = 8;
-    int meterHeight = getHeight() - 100;
-    int meterY = 60;
+    int meterWidth = 10;
+    int meterHeight = getHeight() - 120;
+    int meterY = 70;
 
-    // 1. Input Meter Background (Left Edge)
+    g.setFont (juce::FontOptions (10.0f).withStyle ("Bold"));
+    g.setColour(juce::Colours::grey);
+    g.drawText("IN", 15, meterY - 20, 20, 20, juce::Justification::centred);
+    g.drawText("OUT", getWidth() - 35, meterY - 20, 20, 20, juce::Justification::centred);
+
     g.setColour (juce::Colour (0xFF2D2D2D));
-    g.fillRect (10, meterY, meterWidth, meterHeight);
-    
-    // Input Meter Fill
+    g.fillRect (20, meterY, meterWidth, meterHeight);
     g.setColour (juce::Colour (0xFF0087FF));
     float inFill = meterHeight * juce::jmin (1.0f, smoothInputLevel);
-    g.fillRect (10.0f, meterY + meterHeight - inFill, (float)meterWidth, inFill);
+    g.fillRect (20.0f, meterY + meterHeight - inFill, (float)meterWidth, inFill);
 
-    // 2. Output Meter Background (Right Edge)
     g.setColour (juce::Colour (0xFF2D2D2D));
-    g.fillRect (getWidth() - meterWidth - 10, meterY, meterWidth, meterHeight);
-
-    // Output Meter Fill
+    g.fillRect (getWidth() - 30, meterY, meterWidth, meterHeight);
     g.setColour (juce::Colour (0xFF0087FF));
     float outFill = meterHeight * juce::jmin (1.0f, smoothOutputLevel);
-    g.fillRect ((float)(getWidth() - meterWidth - 10), meterY + meterHeight - outFill, (float)meterWidth, outFill);
+    g.fillRect ((float)(getWidth() - 30), meterY + meterHeight - outFill, (float)meterWidth, outFill);
 }
 
 void NewLouderSaturator_Feb21AudioProcessorEditor::resized()
 {
-    auto area = getLocalBounds().reduced (35, 0); // Increased margin to make room for meters
-    area.removeFromTop (60); // Header space
+    auto bindKnob = [](juce::Slider& s, juce::Label& l, juce::Rectangle<int> bounds) {
+        l.setBounds (bounds.removeFromBottom (20)); 
+        s.setBounds (bounds);                       
+    };
 
-    auto mainRow = area.removeFromTop (area.getHeight() * 0.6f);
-    auto bottomRow = area;
+    bypassButton.setBounds (15, 15, 60, 20); 
 
-    // Center Column (Large Drive)
-    auto centerWidth = mainRow.getWidth() * 0.4f;
-    auto driveArea = mainRow.withSizeKeepingCentre (centerWidth, centerWidth);
-    driveSlider.setBounds (driveArea);
-    driveLabel.setBounds (driveArea.translated (0, driveArea.getHeight() * 0.5f + 5).withHeight (20));
+    auto area = getLocalBounds().reduced (55, 0); 
+    area.removeFromTop (60); 
+    auto bottomRow = area.removeFromBottom (100); 
 
-    // Flanking Columns (Reverb & Tone)
-    auto sideWidth = (mainRow.getWidth() - centerWidth) * 0.5f;
-    auto reverbColumn = mainRow.removeFromLeft(sideWidth);
-    auto toneColumn = mainRow.removeFromRight(sideWidth);
+    auto satArea = area.removeFromLeft (area.getWidth() / 2.0f).reduced(10);
+    auto revArea = area.reduced(10);
 
-    // Reverb Controls
-    auto reverbKnobSize = sideWidth * 0.7f;
-    auto reverbArea = reverbColumn.removeFromTop(reverbColumn.getHeight() * 0.7f).withSizeKeepingCentre(reverbKnobSize, reverbKnobSize);
-    reverbSlider.setBounds(reverbArea);
-    reverbLabel.setBounds(reverbArea.translated(0, reverbArea.getHeight() * 0.5f + 5).withHeight(20));
+    satSectionLabel.setBounds(satArea.removeFromTop(30));
+    revSectionLabel.setBounds(revArea.removeFromTop(30));
 
-    auto subReverbArea = reverbColumn;
-    auto smallKnobSize = subReverbArea.getWidth() * 0.4f;
-    auto sizeArea = subReverbArea.removeFromLeft(subReverbArea.getWidth() / 2).withSizeKeepingCentre(smallKnobSize, smallKnobSize);
-    sizeSlider.setBounds(sizeArea);
-    sizeLabel.setBounds(sizeArea.translated(0, sizeArea.getHeight() * 0.5f + 5).withHeight(20));
+    bindKnob (driveSlider, driveLabel, satArea.removeFromTop (160).withSizeKeepingCentre (140, 160));
+    bindKnob (toneSlider, toneLabel, satArea.removeFromTop (100).withSizeKeepingCentre (90, 110));   
 
-    auto dampingArea = subReverbArea.withSizeKeepingCentre(smallKnobSize, smallKnobSize);
-    dampingSlider.setBounds(dampingArea);
-    dampingLabel.setBounds(dampingArea.translated(0, dampingArea.getHeight() * 0.5f + 5).withHeight(20));
+    reverbTypeCombo.setBounds(revArea.removeFromTop(20).withSizeKeepingCentre(75, 20));
+    revArea.removeFromTop(12); 
+    
+    bindKnob (reverbSlider, reverbLabel, revArea.removeFromTop (140).withSizeKeepingCentre (130, 150));
+    
+    auto revMedRow = revArea.removeFromTop(100);
+    bindKnob (decaySlider, decayLabel, revMedRow.removeFromLeft(revMedRow.getWidth() / 2.0f).withSizeKeepingCentre (90, 110)); 
+    bindKnob (dampingSlider, dampingLabel, revMedRow.withSizeKeepingCentre (90, 110)); 
+    
+    revArea.removeFromTop(5); 
+    prePostButton.setBounds(revArea.removeFromTop(30).withSizeKeepingCentre(60, 20)); 
 
-    // Tone Control
-    auto toneKnobSize = sideWidth * 0.8f;
-    auto toneArea = toneColumn.withSizeKeepingCentre(toneKnobSize, toneKnobSize);
-    toneSlider.setBounds(toneArea);
-    toneLabel.setBounds(toneArea.translated(0, toneArea.getHeight() * 0.5f + 5).withHeight(20));
-
-
-    // Button Position
-    prePostButton.setBounds (reverbArea.translated (0, -40).withHeight (30).withWidth (60));
-
-    // Bottom Row (Small Width, Mix, Output)
-    auto smallSize = bottomRow.getWidth() / 3.0f;
-    auto sliderSize = smallSize * 0.6f;
-
-    auto widthArea = bottomRow.removeFromLeft (smallSize).withSizeKeepingCentre (sliderSize, sliderSize);
-    widthSlider.setBounds (widthArea);
-    widthLabel.setBounds (widthArea.translated (0, widthArea.getHeight() * 0.5f + 5).withHeight (20));
-
-    auto mixArea = bottomRow.removeFromLeft (smallSize).withSizeKeepingCentre (sliderSize, sliderSize);
-    mixSlider.setBounds (mixArea);
-    mixLabel.setBounds (mixArea.translated (0, mixArea.getHeight() * 0.5f + 5).withHeight (20));
-
-    auto outputArea = bottomRow.removeFromLeft (smallSize).withSizeKeepingCentre (sliderSize, sliderSize);
-    outputSlider.setBounds (outputArea);
-    outputLabel.setBounds (outputArea.translated (0, outputArea.getHeight() * 0.5f + 5).withHeight (20));
+    float smallW = bottomRow.getWidth() / 4.0f;
+    bindKnob (inputSlider, inputLabel, bottomRow.removeFromLeft(smallW).withSizeKeepingCentre(70, 90));   
+    bindKnob (mixSlider, mixLabel, bottomRow.removeFromLeft(smallW).withSizeKeepingCentre(70, 90));       
+    bindKnob (widthSlider, widthLabel, bottomRow.removeFromLeft(smallW).withSizeKeepingCentre(70, 90));   
+    bindKnob (outputSlider, outputLabel, bottomRow.withSizeKeepingCentre(70, 90));                        
 }
