@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="LjPyns" name="NewLouderSaturator_Feb21" projectType="audioplug"
-              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
-              bundleIdentifier="com.yourcompany.NewLouderSaturatorFeb21">
-  <MAINGROUP id="Oxby4X" name="NewLouderSaturator_Feb21">
+<JUCERPROJECT id="LjPyns" name="LOUDER Saturator" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" bundleIdentifier="com.yourcompany.NewLouderSaturatorFeb21"
+              pluginName="a LOUDER Saturator" companyName="Revel Plugins" pluginManufacturerCode="Revl"
+              pluginCode="Loud">
+  <MAINGROUP id="Oxby4X" name="LOUDER Saturator">
     <GROUP id="{530EAF69-D447-6A3E-53CD-8600FA6523C8}" name="Source">
       <FILE id="xOEvv7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

@@ -1,9 +1,9 @@
 {
-  "Name": "NewLouderSaturator_Feb21",
+  "Name": "a LOUDER Saturator",
   "Version": "1.0.0",
   "Factory Info": {
-    "Vendor": "yourcompany",
-    "URL": "www.yourcompany.com",
+    "Vendor": "Revel Plugins",
+    "URL": "www.RevelPlugins.com",
     "E-Mail": "",
     "Flags": {
       "Unicode": true,
@@ -13,10 +13,10 @@
   },
   "Classes": [
     {
-      "CID": "ABCDEF019182FAEB4D616E754C6A7079",
+      "CID": "ABCDEF019182FAEB5265766C4C6F7564",
       "Category": "Audio Module Class",
-      "Name": "NewLouderSaturator_Feb21",
-      "Vendor": "yourcompany",
+      "Name": "a LOUDER Saturator",
+      "Vendor": "Revel Plugins",
       "Version": "1.0.0",
       "SDKVersion": "VST 3.8.0",
       "Sub Categories": [
@@ -28,10 +28,10 @@
       ],
     },
     {
-      "CID": "ABCDEF011234ABCD4D616E754C6A7079",
+      "CID": "ABCDEF011234ABCD5265766C4C6F7564",
       "Category": "Component Controller Class",
-      "Name": "NewLouderSaturator_Feb21",
-      "Vendor": "yourcompany",
+      "Name": "a LOUDER Saturator",
+      "Vendor": "Revel Plugins",
       "Version": "1.0.0",
       "SDKVersion": "VST 3.8.0",
       "Sub Categories": [

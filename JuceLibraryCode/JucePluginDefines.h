@@ -41,25 +41,25 @@
  #define JucePlugin_Enable_ARA             0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "NewLouderSaturator_Feb21"
+ #define JucePlugin_Name                   "a LOUDER Saturator"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "NewLouderSaturator_Feb21"
+ #define JucePlugin_Desc                   "LOUDER Saturator"
 #endif
 #ifndef  JucePlugin_Manufacturer
- #define JucePlugin_Manufacturer           "yourcompany"
+ #define JucePlugin_Manufacturer           "Revel Plugins"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
- #define JucePlugin_ManufacturerWebsite    "www.yourcompany.com"
+ #define JucePlugin_ManufacturerWebsite    "www.RevelPlugins.com"
 #endif
 #ifndef  JucePlugin_ManufacturerEmail
  #define JucePlugin_ManufacturerEmail      ""
 #endif
 #ifndef  JucePlugin_ManufacturerCode
- #define JucePlugin_ManufacturerCode       0x4d616e75
+ #define JucePlugin_ManufacturerCode       0x5265766c
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x4c6a7079
+ #define JucePlugin_PluginCode             0x4c6f7564
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
@@ -101,10 +101,10 @@
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_AUExportPrefix
- #define JucePlugin_AUExportPrefix         NewLouderSaturator_Feb21AU
+ #define JucePlugin_AUExportPrefix         LOUDERSaturatorAU
 #endif
 #ifndef  JucePlugin_AUExportPrefixQuoted
- #define JucePlugin_AUExportPrefixQuoted   "NewLouderSaturator_Feb21AU"
+ #define JucePlugin_AUExportPrefixQuoted   "LOUDERSaturatorAU"
 #endif
 #ifndef  JucePlugin_AUManufacturerCode
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
@@ -113,7 +113,7 @@
  #define JucePlugin_CFBundleIdentifier     com.yourcompany.NewLouderSaturatorFeb21
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.NewLouderSaturator_Feb21
+ #define JucePlugin_AAXIdentifier          com.RevelPlugins.LOUDERSaturator
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
@@ -137,7 +137,7 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "yourcompany: NewLouderSaturator_Feb21"
+ #define JucePlugin_IAAName                "Revel Plugins: a LOUDER Saturator"
 #endif
 #ifndef  JucePlugin_VSTNumMidiInputs
  #define JucePlugin_VSTNumMidiInputs       16
@@ -152,10 +152,10 @@
  #define JucePlugin_ARATransformationFlags  0
 #endif
 #ifndef  JucePlugin_ARAFactoryID
- #define JucePlugin_ARAFactoryID           "com.yourcompany.NewLouderSaturator_Feb21.factory"
+ #define JucePlugin_ARAFactoryID           "com.RevelPlugins.LOUDERSaturator.factory"
 #endif
 #ifndef  JucePlugin_ARADocumentArchiveID
- #define JucePlugin_ARADocumentArchiveID   "com.yourcompany.NewLouderSaturator_Feb21.aradocumentarchive.1.0.0"
+ #define JucePlugin_ARADocumentArchiveID   "com.RevelPlugins.LOUDERSaturator.aradocumentarchive.1.0.0"
 #endif
 #ifndef  JucePlugin_ARACompatibleArchiveIDs
  #define JucePlugin_ARACompatibleArchiveIDs  ""

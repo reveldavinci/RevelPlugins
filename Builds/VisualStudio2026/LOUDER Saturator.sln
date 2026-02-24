@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 18
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LOUDER Saturator - Standalone Plugin", "LOUDER Saturator_StandalonePlugin.vcxproj", "{89282121-9D81-B956-DD3C-20507E850456}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E} = {57F595B1-7B5D-C505-335C-8E9F8225C72E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LOUDER Saturator - VST3", "LOUDER Saturator_VST3.vcxproj", "{CC50C661-96EB-0CD8-A40F-505BAC522511}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E} = {57F595B1-7B5D-C505-335C-8E9F8225C72E}
+		{45A50B19-09CB-6189-C58D-FB6529948E0D} = {45A50B19-09CB-6189-C58D-FB6529948E0D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LOUDER Saturator - Shared Code", "LOUDER Saturator_SharedCode.vcxproj", "{57F595B1-7B5D-C505-335C-8E9F8225C72E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LOUDER Saturator - VST3 Manifest Helper", "LOUDER Saturator_VST3ManifestHelper.vcxproj", "{45A50B19-09CB-6189-C58D-FB6529948E0D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC50C661-96EB-0CD8-A40F-505BAC522511}.Debug|x64.ActiveCfg = Debug|x64
+		{CC50C661-96EB-0CD8-A40F-505BAC522511}.Debug|x64.Build.0 = Debug|x64
+		{CC50C661-96EB-0CD8-A40F-505BAC522511}.Release|x64.ActiveCfg = Release|x64
+		{CC50C661-96EB-0CD8-A40F-505BAC522511}.Release|x64.Build.0 = Release|x64
+		{89282121-9D81-B956-DD3C-20507E850456}.Debug|x64.ActiveCfg = Debug|x64
+		{89282121-9D81-B956-DD3C-20507E850456}.Debug|x64.Build.0 = Debug|x64
+		{89282121-9D81-B956-DD3C-20507E850456}.Release|x64.ActiveCfg = Release|x64
+		{89282121-9D81-B956-DD3C-20507E850456}.Release|x64.Build.0 = Release|x64
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E}.Debug|x64.ActiveCfg = Debug|x64
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E}.Debug|x64.Build.0 = Debug|x64
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E}.Release|x64.ActiveCfg = Release|x64
+		{57F595B1-7B5D-C505-335C-8E9F8225C72E}.Release|x64.Build.0 = Release|x64
+		{45A50B19-09CB-6189-C58D-FB6529948E0D}.Debug|x64.ActiveCfg = Debug|x64
+		{45A50B19-09CB-6189-C58D-FB6529948E0D}.Debug|x64.Build.0 = Debug|x64
+		{45A50B19-09CB-6189-C58D-FB6529948E0D}.Release|x64.ActiveCfg = Release|x64
+		{45A50B19-09CB-6189-C58D-FB6529948E0D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

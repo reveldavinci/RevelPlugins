@@ -10,9 +10,9 @@
     <key>CFBundleIdentifier</key>
     <string>com.yourcompany.NewLouderSaturatorFeb21</string>
     <key>CFBundleName</key>
-    <string>NewLouderSaturator_Feb21</string>
+    <string>LOUDER Saturator</string>
     <key>CFBundleDisplayName</key>
-    <string>NewLouderSaturator_Feb21</string>
+    <string>LOUDER Saturator</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
@@ -29,17 +29,17 @@
     <array>
       <dict>
         <key>name</key>
-        <string>yourcompany: NewLouderSaturator_Feb21</string>
+        <string>Revel Plugins: a LOUDER Saturator</string>
         <key>description</key>
-        <string>NewLouderSaturator_Feb21</string>
+        <string>LOUDER Saturator</string>
         <key>factoryFunction</key>
-        <string>NewLouderSaturator_Feb21AUFactory</string>
+        <string>LOUDERSaturatorAUFactory</string>
         <key>manufacturer</key>
-        <string>Manu</string>
+        <string>Revl</string>
         <key>type</key>
         <string>aufx</string>
         <key>subtype</key>
-        <string>Ljpy</string>
+        <string>Loud</string>
         <key>version</key>
         <integer>65536</integer>
         <key>resourceUsage</key>
